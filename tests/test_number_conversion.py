@@ -1,41 +1,6 @@
 """Plugin tests."""
-import io
-
-import pytest
-from cmem.cmempy.workspace.projects.datasets.dataset import make_new_dataset
-from cmem.cmempy.workspace.projects.project import delete_project, make_new_project
-from cmem.cmempy.workspace.projects.resources.resource import (
-    create_resource,
-)
 
 from cmem_plugin_number_conversion.transform import NumberConversion
-
-PROJECT_NAME = "number-conversion_test_project"
-DATASET_NAME = "sample_dataset"
-RESOURCE_NAME = "sample_dataset.txt"
-DATASET_TYPE = "text"
-
-
-@pytest.fixture
-def setup(request):
-    """Provides the DI build project incl. assets."""
-    make_new_project(PROJECT_NAME)
-    make_new_dataset(
-        project_name=PROJECT_NAME,
-        dataset_name=DATASET_NAME,
-        dataset_type=DATASET_TYPE,
-        parameters={"file": RESOURCE_NAME},
-        autoconfigure=False,
-    )
-    with io.StringIO("number-conversion plugin sample file.") as response_file:
-        create_resource(
-            project_name=PROJECT_NAME,
-            resource_name=RESOURCE_NAME,
-            file_resource=response_file,
-            replace=True,
-        )
-
-    request.addfinalizer(lambda: delete_project(PROJECT_NAME))
 
 
 def test_transform_execution_with_optional_input():
@@ -45,7 +10,7 @@ def test_transform_execution_with_optional_input():
 
 
 def test_transform_execution_int_to_bin():
-    """Test Lifetime with sequence of inputs."""
+    """Test decimal to binary conversion"""
     result = NumberConversion(source_base="int", target_base="bin").transform(
         inputs=[["11", "3"]]
     )
@@ -53,7 +18,7 @@ def test_transform_execution_int_to_bin():
 
 
 def test_transform_execution_int_to_int():
-    """Test Lifetime with sequence of inputs."""
+    """Test decimal to decimal conversion"""
     result = NumberConversion(source_base="int", target_base="int").transform(
         inputs=[["11", "3"]]
     )
@@ -61,8 +26,32 @@ def test_transform_execution_int_to_int():
 
 
 def test_transform_execution_bin_to_bin():
-    """Test Lifetime with sequence of inputs."""
+    """Test binary to binary conversion"""
     result = NumberConversion(source_base="bin", target_base="bin").transform(
         inputs=[["0b11", "1"]]
     )
     assert result == ["0b11", "0b1"]
+
+
+def test_transform_execution_bin_to_int():
+    """Test binary to decimal conversion"""
+    result = NumberConversion(source_base="bin", target_base="int").transform(
+        inputs=[["0b11", "1"]]
+    )
+    assert result == ["3", "1"]
+
+
+def test_transform_execution_hex_to_oct():
+    """Test hex to oct conversion"""
+    result = NumberConversion(source_base="hex", target_base="oct").transform(
+        inputs=[["0xa", "0x1"]]
+    )
+    assert result == ["0o12", "0o1"]
+
+
+def test_transform_execution_oct_to_hex():
+    """Test oct to hex conversion"""
+    result = NumberConversion(source_base="oct", target_base="hex").transform(
+        inputs=[["0o12", "0o1"]]
+    )
+    assert result == ["0xa", "0x1"]
