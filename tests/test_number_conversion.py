@@ -10,7 +10,6 @@ from cmem.cmempy.workspace.projects.resources.resource import (
 )
 
 from cmem_plugin_number-conversion.transform import Lifetime
-from cmem_plugin_number-conversion.workflow import DollyPlugin
 from tests.utils import TestExecutionContext, needs_cmem
 
 PROJECT_NAME = "number-conversion_test_project"
@@ -39,18 +38,6 @@ def setup(request):
         )
 
     request.addfinalizer(lambda: delete_project(PROJECT_NAME))
-
-
-@needs_cmem
-def test_workflow_execution():
-    """Test plugin execution"""
-    entities = 100
-    values = 10
-
-    plugin = DollyPlugin(number_of_entities=entities, number_of_values=values)
-    result = plugin.execute(inputs=(), context=TestExecutionContext())
-    for item in result.entities:
-        assert len(item.values) == len(result.schema.paths)
 
 
 def test_transform_execution_with_optional_input():
