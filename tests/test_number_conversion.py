@@ -6,11 +6,9 @@ from cmem.cmempy.workspace.projects.datasets.dataset import make_new_dataset
 from cmem.cmempy.workspace.projects.project import delete_project, make_new_project
 from cmem.cmempy.workspace.projects.resources.resource import (
     create_resource,
-    get_resource_response,
 )
 
-from cmem_plugin_number-conversion.transform import Lifetime
-from tests.utils import TestExecutionContext, needs_cmem
+from cmem_plugin_number_conversion.transform import NumberConversion
 
 PROJECT_NAME = "number-conversion_test_project"
 DATASET_NAME = "sample_dataset"
@@ -42,21 +40,29 @@ def setup(request):
 
 def test_transform_execution_with_optional_input():
     """Test Lifetime with optional input"""
-    result = Lifetime(start_date="2000-05-22").transform(inputs=[])
-    for item in result:
-        assert item == "22"
+    result = NumberConversion(source_base="bin", target_base="int").transform(inputs=[])
+    assert len(result) == 0
 
 
-def test_transform_execution_with_inputs():
+def test_transform_execution_int_to_bin():
     """Test Lifetime with sequence of inputs."""
-    result = Lifetime(start_date="").transform(
-        inputs=[["2000-05-22", "2021-12-12", "1904-02-29"]]
+    result = NumberConversion(source_base="int", target_base="bin").transform(
+        inputs=[["11", "3"]]
     )
-    assert result == ["22", "0", "118"]
+    assert result == ["0b1011", "0b11"]
 
 
-@needs_cmem
-def test_integration_placeholder(setup):
-    """Placeholder to write integration testcase with cmem"""
-    with get_resource_response(PROJECT_NAME, RESOURCE_NAME) as response:
-        assert response.text != ""
+def test_transform_execution_int_to_int():
+    """Test Lifetime with sequence of inputs."""
+    result = NumberConversion(source_base="int", target_base="int").transform(
+        inputs=[["11", "3"]]
+    )
+    assert result == ["11", "3"]
+
+
+def test_transform_execution_bin_to_bin():
+    """Test Lifetime with sequence of inputs."""
+    result = NumberConversion(source_base="bin", target_base="bin").transform(
+        inputs=[["0b11", "1"]]
+    )
+    assert result == ["0b11", "0b1"]

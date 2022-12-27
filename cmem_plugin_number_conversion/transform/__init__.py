@@ -1,74 +1,84 @@
-"""lifetime(age) transform plugin module"""
-import datetime
-from datetime import date
+"""Number Conversion transform plugin module"""
 from typing import Sequence
+import collections
 
 from cmem_plugin_base.dataintegration.description import (
     Plugin,
     PluginParameter,
 )
+from cmem_plugin_base.dataintegration.parameter.choice import ChoiceParameterType
 from cmem_plugin_base.dataintegration.plugins import TransformPlugin
+
+NUMBER_BASES = collections.OrderedDict(
+    {
+        "bin": "Binary",
+        "oct": "Octal",
+        "int": "Decimal",
+        "hex": "Hexadecimal",
+    }
+)
 
 
 @Plugin(
-    label="Lifetime (age - number-conversion)",
-    plugin_id="Example-Lifetime-number-conversion",
-    description="From the input date,"
-    "the value gets transformed into number of years (age)."
-    " Supports only xsd:date(YYYY-MM-DD) format.",
-    documentation="""
-This example transform operator returns lifetime(age).
-
-From the input date,
-the value gets transformed into number of years(age).
-
-Input Date:         2000-05-22
-Current Date:       2022-08-19
-Transformed Output: 22
-
-The parameter can be specified:
-
-- 'date': specify a date in xsd:date(yyyy-MM-dd) format
-""",
+    label="Convert Number Base",
+    plugin_id="cmem-plugin-number-conversion",
+    description="Convert number from one base to another base",
+    documentation="""Convert number from one base to another base""",
     parameters=[
         PluginParameter(
-            name="start_date",
-            label="Date",
-            description="specify a date to know its lifetime(age).",
-            default_value=None,
+            name="source_base",
+            label="Source Base",
+            description="Source Number Base",
+            param_type=ChoiceParameterType(NUMBER_BASES),
+        ),
+        PluginParameter(
+            name="target_base",
+            label="Target Base",
+            description="Source Number Base",
+            param_type=ChoiceParameterType(NUMBER_BASES),
         ),
     ],
 )
-class Lifetime(TransformPlugin):
-    """Lifetime Transform Plugin"""
+class NumberConversion(TransformPlugin):
+    """Number Conversion Transform Plugin"""
 
-    DATE_FORMAT = "%Y-%m-%d"
-
-    def __init__(self, start_date: str):
-        self.start_date = start_date
+    def __init__(self, source_base: str, target_base: str):
+        self.source_base = source_base
+        self.target_base = target_base
 
     def transform(self, inputs: Sequence[Sequence[str]]) -> Sequence[str]:
         result = []
-        if len(inputs) != 0:
-            for collection in inputs:
-                result += [f"{self._calculate_age(_)}" for _ in collection]
-        if len(result) == 0 and len(self.start_date) > 0:
-            result += [f"{self._calculate_age(self.start_date)}"]
+        for _ in inputs:
+            for num in _:
+                target_base_number = self.convert_number_to_target_base(
+                    self.convert_source_base_str_to_int(num)
+                )
+                result.append(f"{target_base_number}")
+
         return result
 
-    def _calculate_age(self, value: str) -> int:
-        """calculate age in years"""
-        today = date.today()
-        born = datetime.datetime.strptime(value, self.DATE_FORMAT).date()
-        try:
-            birthday = born.replace(year=today.year)
+    def convert_source_base_str_to_int(self, num: str) -> int:
+        """Convert string to int"""
+        base = self.source_base
+        if base == "bin":
+            result = int(num, base=2)
+        if base == "oct":
+            result = int(num, base=8)
+        if base == "int":
+            result = int(num, base=10)
+        if base == "hex":
+            result = int(num, base=16)
+        return result
 
-        # raised when birthdate is February 29
-        # and the current year is not a leap year
-        except ValueError:
-            birthday = born.replace(year=today.year, month=born.month + 1, day=1)
-
-        if birthday > today:
-            return today.year - born.year - 1
-
-        return today.year - born.year
+    def convert_number_to_target_base(self, num: int):
+        """Convert int to target base number"""
+        base = self.target_base
+        if base == "bin":
+            return bin(num)
+        if base == "oct":
+            return oct(num)
+        if base == "int":
+            return int(num)
+        if base == "hex":
+            return hex(num)
+        return None
