@@ -23,7 +23,10 @@ NUMBER_BASES = collections.OrderedDict(
     label="Convert Number Base",
     plugin_id="cmem-plugin-number-conversion",
     description="Convert number from one base to another base",
-    documentation="""Convert number from one base to another base""",
+    documentation="""Transform plugin allows users to easily convert numbers
+    from one base to another. With support for binary, octal, decimal, and hexadecimal,
+    users can choose the source and target bases to suit their needs.""",
+    categories=["Numeric", "Conversion"],
     parameters=[
         PluginParameter(
             name="source_base",

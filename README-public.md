@@ -1,6 +1,6 @@
 # cmem-plugin-number-conversion
 
-This Trasform plugin is used to convert numbers from one base to another base
+Transform plugin allows users to easily convert numbers from one base to another.
 
 This is a plugin for [eccenca](https://eccenca.com) [Corporate Memory](https://documentation.eccenca.com).
 
