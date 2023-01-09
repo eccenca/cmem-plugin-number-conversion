@@ -22,7 +22,8 @@ NUMBER_BASES = collections.OrderedDict(
 @Plugin(
     label="Convert Number Base",
     plugin_id="cmem-plugin-number-conversion",
-    description="Convert number from one base to another base",
+    description="Convert numbers between different number bases (binary, octal,"
+                " decimal, hexadecimal).",
     documentation="""Transform plugin allows users to easily convert numbers
     from one base to another. With support for binary, octal, decimal, and hexadecimal,
     users can choose the source and target bases to suit their needs.""",

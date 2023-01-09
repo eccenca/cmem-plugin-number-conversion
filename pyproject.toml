@@ -2,7 +2,7 @@
 name = "cmem-plugin-number-conversion"
 version = "0.0.0"
 license = "Apache-2.0"
-description = "This Trasform plugin is used to convert numbers from one base to another base"
+description = "Convert numbers between different number bases (binary, octal, decimal, hexadecimal)."
 authors = ["eccenca GmbH <cmempy-developer@eccenca.com>"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -11,8 +11,9 @@ classifiers = [
 ]
 readme = "README-public.md"
 keywords = [
-    "eccenca Corporate Memory", "plugin"
+    "eccenca Corporate Memory", "plugin", "number-conversion"
 ]
+homepage = "https://github.com/eccenca/cmem-plugin-number-conversion"
 
 [tool.poetry.dependencies]
 python = "^3.9"
