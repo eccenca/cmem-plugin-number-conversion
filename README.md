@@ -1,6 +1,8 @@
 # cmem-plugin-number-conversion
 
-This Trasform plugin is used to convert numbers from one base to another base
+Convert numbers between binary, octal, decimal and hexadecimal representation.
+
+[![eccenca Corporate Memory](https://img.shields.io/badge/eccenca-Corporate%20Memory-orange)](https://documentation.eccenca.com) [![workflow](https://github.com/eccenca/cmem-plugin-number-conversion/actions/workflows/check.yml/badge.svg)](https://github.com/eccenca/cmem-plugin-number-conversion/actions) [![pypi version](https://img.shields.io/pypi/v/cmem-plugin-number-conversion)](https://pypi.org/project/number-conversion) [![license](https://img.shields.io/pypi/l/cmem-plugin-number-conversion)](https://pypi.org/project/cmem-plugin-number-conversion)
 
 ## Development
 

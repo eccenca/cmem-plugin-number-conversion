@@ -1,9 +1,11 @@
 # Changes here will be overwritten by Copier
-_commit: v3.4.1
+_commit: v5.0.2
 _src_path: gh:eccenca/cmem-plugin-template
 author_mail: cmempy-developer@eccenca.com
 author_name: eccenca GmbH
-project_description: This Trasform plugin is used to convert numbers from one base
-    to another base
+github_page: https://github.com/eccenca/cmem-plugin-number-conversion
+project_description: Convert numbers between binary, octal, decimal and hexadecimal
+    representation.
 project_slug: number-conversion
+pypi: true
 

@@ -1,6 +1,6 @@
 # cmem-plugin-number-conversion
 
-Transform plugin allows users to easily convert numbers from one base to another.
+Convert numbers between binary, octal, decimal and hexadecimal representation.
 
 This is a plugin for [eccenca](https://eccenca.com) [Corporate Memory](https://documentation.eccenca.com).
 
