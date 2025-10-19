@@ -1,6 +1,7 @@
 """Number Conversion transform plugin module"""
-from typing import Sequence
+
 import collections
+from collections.abc import Sequence
 
 from cmem_plugin_base.dataintegration.description import (
     Plugin,
@@ -23,7 +24,7 @@ NUMBER_BASES = collections.OrderedDict(
     label="Convert Number Base",
     plugin_id="cmem-plugin-number-conversion",
     description="Convert numbers between different number bases (binary, octal,"
-                " decimal, hexadecimal).",
+    " decimal, hexadecimal).",
     documentation="""Transform plugin allows users to easily convert numbers
     from one base to another. With support for binary, octal, decimal, and hexadecimal,
     users can choose the source and target bases to suit their needs.""",
@@ -51,6 +52,7 @@ class NumberConversion(TransformPlugin):
         self.target_base = target_base
 
     def transform(self, inputs: Sequence[Sequence[str]]) -> Sequence[str]:
+        """Transform a collection of values."""
         result = []
         for _ in inputs:
             for num in _:
@@ -74,7 +76,7 @@ class NumberConversion(TransformPlugin):
             result = int(num, base=16)
         return result
 
-    def convert_number_to_target_base(self, num: int):
+    def convert_number_to_target_base(self, num: int) -> int | str | None:
         """Convert int to target base number"""
         base = self.target_base
         if base == "bin":
